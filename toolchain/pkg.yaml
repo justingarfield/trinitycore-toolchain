@@ -1,0 +1,16 @@
+name: toolchain
+dependencies:
+  - stage: binutils
+  - stage: clang
+steps:
+  - env:
+      PATH: "{{ .TOOLCHAIN }}/bin:{{ .PATH }}"
+    test:
+      - |
+        echo 'int main(){}' > dummy.c
+        cc dummy.c
+        readelf -l a.out | grep ": ${TOOLCHAIN}"
+        ./a.out
+finalize:
+  - from: "{{ .TOOLCHAIN }}"
+    to: "{{ .TOOLCHAIN }}"

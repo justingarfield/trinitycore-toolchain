@@ -1,0 +1,23 @@
+name: bootstrap-clang
+install:
+  - build-base
+steps:
+  - sources:
+      - url: https://github.com/llvm/llvm-project/releases/download/llvmorg-{{ .clang_version }}/clang-{{ .clang_version }}.src.tar.xz
+        destination: clang.tar.xz
+        sha256: "{{ .clang_sha256 }}"
+        sha512: "{{ .clang_sha512 }}"
+    prepare:
+      - |
+
+    build:
+      - |
+        cd build
+        make -j $(nproc)
+    install:
+      - |
+        cd build
+        make install-strip
+finalize:
+  - from: "{{ .BOOTSTRAP }}"
+    to: "{{ .BOOTSTRAP }}"
